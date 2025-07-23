@@ -9,9 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fontsource/jetbrains-mono": "^5.2.6",
+    "@fontsource/manrope": "^5.2.6",
+    "@fontsource/syne": "^5.2.6",
+    "@supabase/supabase-js": "^2.52.0",
     "next": "15.4.3",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-hot-toast": "^2.5.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
