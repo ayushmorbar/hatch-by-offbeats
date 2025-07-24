@@ -10,6 +10,15 @@ module.exports = {
         manrope: ["Manrope", "sans-serif"],
         "jetbrains-mono": ["JetBrains Mono", "monospace"],
       },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(-4%)' },
+          '50%': { transform: 'translateY(0)' },
+        }
+      },
+      animation: {
+        float: 'float 6s ease-in-out infinite',
+      },
       colors: {
         black: "#000000",
         white: "#FFFFFF",
