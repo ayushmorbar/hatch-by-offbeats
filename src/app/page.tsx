@@ -2,49 +2,43 @@
 "use client";
 import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
-import Link from "next/link";
 
 export default function Home() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<string | null>(null);
-  const [stats, setStats] = useState<{ ideas: number; comments: number; likes: number }>({ ideas: 0, comments: 0, likes: 0 });
-  const [featured, setFeatured] = useState<any[]>([]);
+  const [status, setStatus] = useState<string>("");
 
-  useEffect(() => {
-    async function fetchStats() {
-      const [{ count: ideas }, { count: comments }, { data: likesData }, { data: featuredIdeas }] = await Promise.all([
-        supabase.from("ideas").select("id", { count: "exact", head: true }),
-        supabase.from("comments").select("id", { count: "exact", head: true }),
-        supabase.from("ideas").select("likes"),
-        supabase.from("ideas").select("id, content, tags, likes").order("likes", { ascending: false }).limit(5),
-      ]);
-      const likes = Array.isArray(likesData) ? likesData.reduce((acc, idea) => acc + (idea.likes || 0), 0) : 0;
-      setStats({ ideas: ideas ?? 0, comments: comments ?? 0, likes });
-      setFeatured(featuredIdeas ?? []);
-    }
-    fetchStats();
-  }, []);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!email) return;
+    if (!email.trim()) {
+      setStatus("Please enter your email.");
+      return;
+    }
     setStatus("Submitting...");
-    supabase.from("emails").insert({ email }).then(({ error }) => {
-      if (error) {
-        setStatus("Something went wrong. Please try again.");
-      } else {
-        setStatus("Thanks! You'll be notified when we launch.");
+    try {
+      const response = await fetch("/api/emails", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setStatus(data.message || "Thanks! You'll be notified when we launch.");
         setEmail("");
+      } else {
+        setStatus(data.error || "Something went wrong. Please try again.");
       }
-    });
+    } catch (error) {
+      setStatus("Something went wrong. Please try again.");
+    }
   }
 
   return (
     <div className="min-h-screen bg-black text-white font-manrope flex flex-col items-center justify-center">
       <section className="flex flex-col items-center justify-center h-screen w-full max-w-xl mx-auto p-8 gap-8">
-        <h1 className="text-5xl font-syne font-extrabold text-center mb-4">Hatch by Offbeats</h1>
+        <h1 className="text-5xl font-syne font-extrabold text-center mb-4">hatch by offbeats</h1>
         <p className="text-lg text-gray-400 font-manrope font-medium text-center mb-8">
-          We're not live yet! Get notified when we launch and be the first to join the community.
+          We&apos;re not live yet! Get notified when we launch and be the first to join the community.
         </p>
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4 items-center">
           <input

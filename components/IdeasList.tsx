@@ -1,6 +1,7 @@
+import { Idea } from "../lib/types";
 import IdeaCard from "./IdeaCard";
 
-export default function IdeasList({ ideas }: { ideas: any[] }) {
+export default function IdeasList({ ideas }: { ideas: Idea[] }) {
   if (!ideas.length)
     return (
       <p className="text-gray-400 font-manrope text-center py-8">

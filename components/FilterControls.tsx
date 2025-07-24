@@ -7,7 +7,7 @@ export default function FilterControls() {
   const searchParams = useSearchParams();
 
   function handleSortChange(value: string) {
-    const params = new URLSearchParams(searchParams as any);
+    const params = new URLSearchParams(searchParams.toString());
     params.set("sort", value);
     router.push(`${pathname}?${params.toString()}`);
   }

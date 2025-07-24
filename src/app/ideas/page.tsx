@@ -2,10 +2,8 @@ import { supabase } from "../../../lib/supabaseClient";
 import IdeasList from "../../../components/IdeasList";
 import FilterControls from "../../../components/FilterControls";
 
-export default async function IdeasPage({ searchParams }: { searchParams: { sort?: string; tag?: string } }) {
-  const awaitedSearchParams = await searchParams;
-  const sort = awaitedSearchParams?.sort || "created_at";
-  const tag = awaitedSearchParams?.tag || null;
+export default async function IdeasPage({ searchParams }: { searchParams: Promise<{ sort?: string; tag?: string }> }) {
+  const { sort = "created_at", tag = null } = await searchParams;
   let query = supabase
     .from("ideas")
     .select("id, content, tags, created_at, likes")
